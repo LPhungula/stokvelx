@@ -1,19 +1,18 @@
 <?php
 /**
  * StokvelX – Database Connection
- * -------------------------------
- * Edit these 4 values to match your local MySQL setup.
- * Default values below work out-of-the-box with XAMPP / WAMP / MAMP
- * (root user, no password, default port).
+ * Reads credentials from Railway environment variables automatically.
+ * Falls back to XAMPP localhost defaults for local development.
  */
 
-$DB_HOST = 'localhost';
-$DB_NAME = 'stokvelx';
-$DB_USER = 'root';
-$DB_PASS = '';
+$DB_HOST    = getenv('MYSQLHOST')     ?: 'localhost';
+$DB_NAME    = getenv('MYSQLDATABASE') ?: 'stokvelx';
+$DB_USER    = getenv('MYSQLUSER')     ?: 'root';
+$DB_PASS    = getenv('MYSQLPASSWORD') ?: '';
+$DB_PORT    = getenv('MYSQLPORT')     ?: '3306';
 $DB_CHARSET = 'utf8mb4';
 
-$dsn = "mysql:host={$DB_HOST};dbname={$DB_NAME};charset={$DB_CHARSET}";
+$dsn = "mysql:host={$DB_HOST};port={$DB_PORT};dbname={$DB_NAME};charset={$DB_CHARSET}";
 
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -28,7 +27,7 @@ try {
     header('Content-Type: application/json; charset=UTF-8');
     echo json_encode([
         'success' => false,
-        'message' => 'Database connection failed. Make sure MySQL is running and the "stokvelx" database has been imported. (' . $e->getMessage() . ')',
+        'message' => 'Database connection failed. (' . $e->getMessage() . ')',
     ]);
     exit;
 }
