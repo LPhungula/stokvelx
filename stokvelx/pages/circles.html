@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My Circles – StokvelX</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="app-wrap">
+  <div id="sidebar-mount"></div>
+  <div class="main">
+    <div class="topbar">
+      <div class="tb-title">My Circles</div>
+      <div class="tb-right">
+        <a href="join.html" class="btn btn-primary btn-sm">+ Join New Circle</a>
+      </div>
+    </div>
+    <div class="pg">
+      <div class="ci-list">
+        <!-- Circle 1 -->
+        <div class="ci-item">
+          <div class="ci-hd">
+            <h3>Campus Builders Stokvel</h3>
+            <span class="badge badge-green">Active</span>
+          </div>
+          <div class="ci-meta">
+            <div><div class="lbl">Position</div><div class="val">5 of 10</div></div>
+            <div><div class="lbl">Next Payout</div><div class="val">29 May 2024</div></div>
+            <div><div class="lbl">Contribution</div><div class="val">R250 / week</div></div>
+          </div>
+          <div class="prog-bar"><div class="prog-fill" data-w="70%" style="width:70%"></div></div>
+          <div class="prog-txt" style="margin-bottom:12px">7 of 10 members paid this week</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-primary btn-sm" data-pay="true">💳 Pay Contribution</button>
+            <button class="btn btn-outline btn-sm" data-modal="scheduleModal">📅 View Schedule</button>
+            <a href="chat.html" class="btn btn-outline btn-sm">💬 Circle Chat</a>
+          </div>
+        </div>
+        <!-- Circle 2 -->
+        <div class="ci-item">
+          <div class="ci-hd">
+            <h3>Future Leaders Stokvel</h3>
+            <span class="badge badge-green">Active</span>
+          </div>
+          <div class="ci-meta">
+            <div><div class="lbl">Position</div><div class="val">3 of 8</div></div>
+            <div><div class="lbl">Next Payout</div><div class="val">05 Jun 2024</div></div>
+            <div><div class="lbl">Contribution</div><div class="val">R300 / week</div></div>
+          </div>
+          <div class="prog-bar"><div class="prog-fill" data-w="75%" style="width:75%"></div></div>
+          <div class="prog-txt" style="margin-bottom:12px">6 of 8 members paid this week</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-primary btn-sm" data-pay="true">💳 Pay Contribution</button>
+            <button class="btn btn-outline btn-sm" data-modal="scheduleModal">📅 View Schedule</button>
+            <a href="chat.html" class="btn btn-outline btn-sm">💬 Circle Chat</a>
+          </div>
+        </div>
+        <!-- Past Circle -->
+        <div class="ci-item" style="opacity:.7">
+          <div class="ci-hd">
+            <h3>Campus Connect Stokvel</h3>
+            <span class="badge badge-blue">Completed</span>
+          </div>
+          <div class="ci-meta">
+            <div><div class="lbl">Total Received</div><div class="val">R1,500.00</div></div>
+            <div><div class="lbl">Completed</div><div class="val">10 May 2024</div></div>
+            <div><div class="lbl">Duration</div><div class="val">10 weeks</div></div>
+          </div>
+          <div class="prog-bar"><div class="prog-fill" style="width:100%"></div></div>
+          <div class="prog-txt" style="margin-bottom:12px">Circle complete ✅</div>
+          <a href="join.html" class="btn btn-outline btn-sm">Rejoin Similar Circle</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="mobnav-mount"></div>
+
+<!-- Schedule Modal -->
+<div class="modal-ov" id="scheduleModal">
+  <div class="modal">
+    <div class="modal-hd"><h3>Payout Schedule</h3><button class="modal-cls">✕</button></div>
+    <ul class="pay-list">
+      <li class="pay-row"><span class="pr-n">1.</span><span class="pr-nm">Lerato M.</span><span class="pr-dt">08 May</span><span class="pr-st st-paid">Paid</span></li>
+      <li class="pay-row"><span class="pr-n">2.</span><span class="pr-nm">Thabo K.</span><span class="pr-dt">15 May</span><span class="pr-st st-paid">Paid</span></li>
+      <li class="pay-row"><span class="pr-n">3.</span><span class="pr-nm">Naledi S.</span><span class="pr-dt">22 May</span><span class="pr-st st-paid">Paid</span></li>
+      <li class="pay-row"><span class="pr-n">4.</span><span class="pr-nm" style="font-weight:700;color:var(--green)">You (Sipho)</span><span class="pr-dt">29 May</span><span class="pr-st st-next">Upcoming</span></li>
+      <li class="pay-row"><span class="pr-n">5.</span><span class="pr-nm">Kabelo M.</span><span class="pr-dt">05 Jun</span><span style="font-size:13px;color:var(--muted)">—</span></li>
+      <li class="pay-row"><span class="pr-n">6.</span><span class="pr-nm">Zanele P.</span><span class="pr-dt">12 Jun</span><span style="font-size:13px;color:var(--muted)">—</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- Pay Modal -->
+<div class="modal-ov" id="payModal">
+  <div class="modal">
+    <div class="modal-hd"><h3>Pay Contribution</h3><button class="modal-cls">✕</button></div>
+    <div style="background:var(--green-light);border-radius:12px;padding:16px;margin-bottom:20px;text-align:center">
+      <div style="font-size:13px;color:var(--muted)">Amount Due</div>
+      <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:var(--green)">R250.00</div>
+    </div>
+    <div class="fg"><label class="fl">Payment Method</label>
+      <select class="fi"><option>Wallet Balance</option><option>EFT</option><option>Card</option></select>
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="closeModal('payModal');showToast('Payment successful! 🎉')">Confirm Payment</button>
+  </div>
+</div>
+<div id="toast" class="toast"></div>
+<script src="../js/api.js"></script>
+<script src="../js/nav.js"></script>
+<script src="../js/main.js"></script>
+<script>
+(async () => {
+  const user = await requireAuth();
+  if (!user) return;
+
+  document.querySelectorAll('.nm').forEach(el => el.textContent = user.first_name + ' ' + user.last_name);
+  document.querySelectorAll('.u-av').forEach(el => el.textContent = user.first_name[0] + user.last_name[0]);
+
+  const data = await api('circles/my-circles');
+  if (!data.success) return;
+
+  const container = document.querySelector('.circles-list');
+  if (!container) return;
+
+  if (data.circles.length === 0) {
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">You haven\'t joined any circles yet. <a href="join.html" style="color:var(--green)">Browse circles</a></div>';
+    return;
+  }
+
+  container.innerHTML = data.circles.map(c => {
+    const typeColor = typeBadge(c.type);
+    const status = c.my_contribution_status;
+    const badge = status === 'paid'
+      ? '<span style="background:#dcfce7;color:#16a34a;border-radius:20px;padding:3px 10px;font-size:12px;font-weight:600">✓ Paid</span>'
+      : status === 'pending'
+      ? '<span style="background:#fef9c3;color:#b45309;border-radius:20px;padding:3px 10px;font-size:12px;font-weight:600">⏳ Pending</span>'
+      : '<span style="background:#fee2e2;color:#dc2626;border-radius:20px;padding:3px 10px;font-size:12px;font-weight:600">⚠️ Late</span>';
+    const payout = c.next_payout
+      ? `<div style="font-size:13px;color:var(--muted)">Next payout: <strong style="color:var(--green)">${formatRand(c.next_payout.amount)}</strong> on ${formatDate(c.next_payout.payout_date)}</div>`
+      : '';
+    return `<div class="circle-card wcard" style="margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+            <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px">${c.name}</span>
+            <span style="background:${typeColor};color:#fff;border-radius:20px;padding:2px 8px;font-size:11px;font-weight:600;text-transform:capitalize">${c.type}</span>
+          </div>
+          <div style="font-size:13px;color:var(--muted)">Position ${c.position} · Week ${c.current_week ?? 1} of ${c.max_members}</div>
+        </div>
+        ${badge}
+      </div>
+      <div style="margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:4px">
+          <span>Contributions collected</span><span>${c.paid_count}/${c.max_members} paid</span>
+        </div>
+        <div style="background:#e5e7eb;border-radius:99px;height:8px">
+          <div style="background:var(--green);height:8px;border-radius:99px;width:${c.progress_percent}%"></div>
+        </div>
+      </div>
+      ${payout}
+      ${status !== 'paid' ? `<button class="btn btn-primary pay-circle-btn" data-id="${c.circle_id}" data-name="${c.name}" data-amount="${c.weekly_contribution}" data-week="${c.current_week}" style="margin-top:12px;width:100%;justify-content:center">💳 Pay Contribution — ${formatRand(c.weekly_contribution)}</button>` : ''}
+    </div>`;
+  }).join('');
+
+  // Wire pay buttons
+  document.querySelectorAll('.pay-circle-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      btn.textContent = 'Processing…';
+      const res = await api('payments/pay', 'POST', { circle_id: parseInt(btn.dataset.id), payment_method: 'wallet' });
+      if (res.success) {
+        showToast('Payment confirmed! 🎉 ' + formatRand(res.amount_paid) + ' paid.');
+        setTimeout(() => location.reload(), 1500);
+      } else {
+        showToast(res.message || 'Payment failed.', true);
+        btn.disabled = false;
+        btn.textContent = '💳 Pay Contribution — ' + formatRand(btn.dataset.amount);
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

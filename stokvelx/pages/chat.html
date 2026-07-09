@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Circle Chat – StokvelX</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="app-wrap">
+  <div id="sidebar-mount"></div>
+  <div class="main">
+    <div class="topbar"><div class="tb-title">Circle Chat</div></div>
+    <div class="chat-layout">
+      <!-- Chat Sidebar -->
+      <div class="chat-sb">
+        <div class="csb-hd">My Circles</div>
+        <div class="chat-rooms">
+          <div class="cr-item active">
+            <div class="cr-av">🟢</div>
+            <div style="flex:1">
+              <div class="cr-nm">Campus Builders</div>
+              <div class="cr-last">Pay your contribution today!</div>
+            </div>
+            <div class="cr-meta">
+              <div class="cr-time">2m ago</div>
+              <div class="cr-badge">3</div>
+            </div>
+          </div>
+          <div class="cr-item">
+            <div class="cr-av">🟡</div>
+            <div style="flex:1">
+              <div class="cr-nm">Future Leaders</div>
+              <div class="cr-last">Great savings week everyone 🙌</div>
+            </div>
+            <div class="cr-meta"><div class="cr-time">1h ago</div></div>
+          </div>
+          <div class="cr-item">
+            <div class="cr-av" style="background:var(--purple-light)">💜</div>
+            <div style="flex:1">
+              <div class="cr-nm">Invest & Grow</div>
+              <div class="cr-last">Monthly returns statement posted</div>
+            </div>
+            <div class="cr-meta">
+              <div class="cr-time">3h ago</div>
+              <div class="cr-badge">1</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Main -->
+      <div class="chat-main">
+        <div class="chat-hd">
+          <div class="cr-av">🟢</div>
+          <div>
+            <div style="font-weight:700;font-size:15px">Campus Builders Stokvel</div>
+            <div style="font-size:12px;color:var(--muted)">10 members · 7 paid this week</div>
+          </div>
+          <div style="margin-left:auto;display:flex;gap:8px">
+            <button class="btn btn-outline btn-sm">📅 Schedule</button>
+            <button class="btn btn-primary btn-sm" data-pay="true">💳 Pay Now</button>
+          </div>
+        </div>
+
+        <div class="chat-msgs" id="chatMsgs">
+          <div style="text-align:center;font-size:12px;color:var(--muted);padding:10px 0">Thursday, 17 May 2024</div>
+
+          <div class="msg recv">
+            <div class="msg-bub">📢 <strong>Admin:</strong> Good morning everyone! This week's contribution deadline is today at 5pm. Please make sure you've paid. 💪</div>
+            <div class="msg-mt">09:00 · Admin</div>
+          </div>
+          <div class="msg recv">
+            <div class="msg-bub">I've paid mine! ✅ Reference: SB2024001</div>
+            <div class="msg-mt">09:15 · Lerato M.</div>
+          </div>
+          <div class="msg recv">
+            <div class="msg-bub">Done! Paid via Capitec 🏦</div>
+            <div class="msg-mt">09:32 · Thabo K.</div>
+          </div>
+          <div class="msg sent">
+            <div class="msg-bub">Just paid mine now via wallet! 🙌</div>
+            <div class="msg-mt">10:02 · You</div>
+          </div>
+          <div class="msg recv">
+            <div class="msg-bub">🎉 <strong>Admin:</strong> 7/10 members have paid so far. Still waiting on 3 members — please pay before 5pm to avoid being locked out.</div>
+            <div class="msg-mt">14:00 · Admin</div>
+          </div>
+          <div class="msg recv">
+            <div class="msg-bub">Reminder: Sipho's payout is on 29 May. He'll receive R2,500 🎊</div>
+            <div class="msg-mt">14:15 · Naledi S.</div>
+          </div>
+          <div class="msg sent">
+            <div class="msg-bub">Can't wait! 😄 This stokvel is the best decision I've made this year.</div>
+            <div class="msg-mt">14:20 · You</div>
+          </div>
+        </div>
+
+        <div class="chat-in">
+          <input class="chat-inp" id="chatInput" placeholder="Type a message...">
+          <button class="send-btn" id="chatSend">➤</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Pay Modal -->
+<div class="modal-ov" id="payModal">
+  <div class="modal">
+    <div class="modal-hd"><h3>Pay Contribution</h3><button class="modal-cls">✕</button></div>
+    <div style="background:var(--green-light);border-radius:12px;padding:16px;margin-bottom:20px;text-align:center">
+      <div style="font-size:13px;color:var(--muted)">Amount Due</div>
+      <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:var(--green)">R250.00</div>
+    </div>
+    <div class="fg"><label class="fl">Method</label><select class="fi"><option>Wallet Balance</option><option>EFT</option><option>Card</option></select></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="closeModal('payModal');showToast('Payment confirmed! ✅')">Confirm Payment</button>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="../js/api.js"></script>
+<script src="../js/nav.js"></script>
+<script src="../js/main.js"></script>
+<script>
+(async () => {
+  const user = await requireAuth();
+  if (!user) return;
+  document.querySelectorAll('.nm').forEach(el => el.textContent = user.first_name + ' ' + user.last_name);
+  document.querySelectorAll('.u-av').forEach(el => el.textContent = user.first_name[0] + user.last_name[0]);
+
+  // Load user's circles to build the sidebar list
+  const circlesData = await api('circles/my-circles');
+  if (!circlesData.success || circlesData.circles.length === 0) return;
+
+  const roomsList = document.querySelector('.chat-rooms');
+  let activeCircleId = circlesData.circles[0].circle_id;
+  let lastMessageId = 0;
+  let pollTimer = null;
+
+  function renderRooms(circles, activeId) {
+    if (!roomsList) return;
+    roomsList.innerHTML = circles.map(c => `
+      <div class="chat-room ${c.circle_id === activeId ? 'active' : ''}" data-id="${c.circle_id}" style="cursor:pointer;padding:10px 12px;border-radius:10px;margin-bottom:6px;${c.circle_id===activeId?'background:var(--green-light)':''}">
+        <div style="font-weight:600;font-size:14px">${c.name}</div>
+        <div style="font-size:12px;color:var(--muted)">Position ${c.position}</div>
+      </div>`).join('');
+    roomsList.querySelectorAll('.chat-room').forEach(item => {
+      item.addEventListener('click', () => {
+        activeCircleId = parseInt(item.dataset.id);
+        lastMessageId = 0;
+        renderRooms(circlesData.circles, activeCircleId);
+        loadMessages(true);
+      });
+    });
+  }
+
+  async function loadMessages(clear = false) {
+    const data = await api(`chat/messages?circle_id=${activeCircleId}&after=${clear ? 0 : lastMessageId}`);
+    if (!data.success) return;
+    const box = document.getElementById('chatMsgs');
+    if (!box) return;
+    if (clear) box.innerHTML = '';
+    data.messages.forEach(m => {
+      if (m.id > lastMessageId) lastMessageId = m.id;
+      const div = document.createElement('div');
+      div.className = 'msg ' + (m.is_mine ? 'msg-out' : 'msg-in');
+      div.innerHTML = !m.is_mine
+        ? `<div class="msg-av">${m.name.split(' ').map(n=>n[0]).join('').slice(0,2)}</div>
+           <div><div class="msg-sender">${m.name}</div><div class="msg-bubble">${m.message}</div><div class="msg-time">${formatDate(m.created_at)}</div></div>`
+        : `<div><div class="msg-bubble">${m.message}</div><div class="msg-time" style="text-align:right">${formatDate(m.created_at)}</div></div>`;
+      box.appendChild(div);
+    });
+    if (clear || data.messages.length > 0) box.scrollTop = box.scrollHeight;
+  }
+
+  // Send message
+  async function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const text = input?.value.trim();
+    if (!text) return;
+    input.value = '';
+    const res = await api('chat/send', 'POST', { circle_id: activeCircleId, message: text });
+    if (res.success) {
+      const m = res.message;
+      lastMessageId = m.id;
+      const box = document.getElementById('chatMsgs');
+      const div = document.createElement('div');
+      div.className = 'msg msg-out';
+      div.innerHTML = `<div><div class="msg-bubble">${m.message}</div><div class="msg-time" style="text-align:right">Just now</div></div>`;
+      box?.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+    } else showToast(res.message || 'Could not send.', true);
+  }
+
+  document.getElementById('chatSend')?.addEventListener('click', sendMessage);
+  document.getElementById('chatInput')?.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(); });
+
+  renderRooms(circlesData.circles, activeCircleId);
+  await loadMessages(true);
+
+  // Poll for new messages every 5 seconds
+  pollTimer = setInterval(() => loadMessages(false), 5000);
+})();
+</script>
+</body>
+</html>

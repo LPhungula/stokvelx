@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Help & Support – StokvelX</title>
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  .help-hero{background:linear-gradient(135deg,var(--green-dark) 0%,var(--green) 100%);border-radius:16px;padding:40px 36px;margin-bottom:28px;color:#fff;position:relative;overflow:hidden}
+  .help-hero::after{content:'📖';position:absolute;right:32px;top:50%;transform:translateY(-50%);font-size:72px;opacity:.18}
+  .help-hero h1{font-size:28px;font-weight:800;margin-bottom:8px;font-family:'Syne',sans-serif}
+  .help-hero p{opacity:.88;font-size:15px;max-width:520px}
+  .help-search{display:flex;gap:10px;margin-bottom:28px}
+  .help-search input{flex:1;padding:12px 16px;border-radius:10px;border:1.5px solid var(--border);font-size:14px;font-family:inherit;outline:none;transition:.2s}
+  .help-search input:focus{border-color:var(--green)}
+  .help-grid{display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:start}
+  @media(max-width:700px){.help-grid{grid-template-columns:1fr}}
+  .help-toc{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:18px;position:sticky;top:24px}
+  .help-toc h3{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+  .toc-item{display:block;padding:8px 10px;border-radius:8px;font-size:13px;color:var(--text);text-decoration:none;cursor:pointer;transition:.15s;border:none;background:none;width:100%;text-align:left}
+  .toc-item:hover{background:var(--green-light);color:var(--green-dark)}
+  .toc-item.active{background:var(--green-light);color:var(--green-dark);font-weight:600}
+  .toc-num{display:inline-block;width:20px;height:20px;background:var(--green);color:#fff;border-radius:50%;font-size:11px;font-weight:700;text-align:center;line-height:20px;margin-right:8px;flex-shrink:0}
+  .help-content{}
+  .help-section{background:#fff;border:1.5px solid var(--border);border-radius:14px;margin-bottom:20px;overflow:hidden}
+  .help-section-hd{padding:20px 24px;border-bottom:1.5px solid var(--border);display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none}
+  .help-section-hd .s-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+  .help-section-hd h2{font-size:16px;font-weight:700;font-family:'Syne',sans-serif;margin:0;flex:1}
+  .help-section-hd .chev{margin-left:auto;font-size:12px;color:var(--muted);transition:.2s}
+  .help-section-hd.open .chev{transform:rotate(180deg)}
+  .help-section-body{padding:24px;display:none}
+  .help-section-body.open{display:block}
+  .help-step{display:flex;gap:14px;margin-bottom:20px;align-items:flex-start}
+  .help-step:last-child{margin-bottom:0}
+  .step-num{width:32px;height:32px;border-radius:50%;background:var(--green);color:#fff;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+  .step-content h4{font-size:14px;font-weight:700;margin-bottom:5px}
+  .step-content p{font-size:13px;color:var(--muted);line-height:1.6;margin:0}
+  .help-tip{background:var(--green-light);border-left:4px solid var(--green);border-radius:0 8px 8px 0;padding:12px 16px;margin:16px 0;font-size:13px;color:var(--green-dark)}
+  .help-tip strong{display:block;margin-bottom:3px}
+  .help-warn{background:#fff7ed;border-left:4px solid var(--orange);border-radius:0 8px 8px 0;padding:12px 16px;margin:16px 0;font-size:13px;color:#92400e}
+  .help-warn strong{display:block;margin-bottom:3px}
+  .help-info{background:#eff6ff;border-left:4px solid #3b82f6;border-radius:0 8px 8px 0;padding:12px 16px;margin:16px 0;font-size:13px;color:#1e3a8a}
+  .help-info strong{display:block;margin-bottom:3px}
+  .faq-item{border-bottom:1px solid var(--border);padding:16px 0}
+  .faq-item:last-child{border-bottom:none}
+  .faq-q{font-weight:600;font-size:14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .faq-q .faq-chev{color:var(--muted);transition:.2s;flex-shrink:0}
+  .faq-q.open .faq-chev{transform:rotate(180deg);color:var(--green)}
+  .faq-a{font-size:13px;color:var(--muted);line-height:1.7;padding-top:10px;display:none}
+  .faq-a.open{display:block}
+  .shortcut-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:500px){.shortcut-grid{grid-template-columns:1fr}}
+  .shortcut-card{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:14px;display:flex;gap:10px;align-items:flex-start}
+  .shortcut-card .sc-ico{font-size:24px}
+  .shortcut-card h4{font-size:13px;font-weight:700;margin-bottom:3px}
+  .shortcut-card p{font-size:12px;color:var(--muted);margin:0;line-height:1.5}
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  @media(max-width:600px){.contact-grid{grid-template-columns:1fr}}
+  .contact-card{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:18px;text-align:center}
+  .contact-card .cc-ico{font-size:28px;margin-bottom:8px}
+  .contact-card h4{font-size:13px;font-weight:700;margin-bottom:4px}
+  .contact-card p{font-size:12px;color:var(--muted);margin:0}
+  .version-badge{display:inline-flex;align-items:center;gap:6px;background:var(--green-light);color:var(--green-dark);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600}
+</style>
+</head>
+<body>
+<div class="app-wrap">
+  <div id="sidebar-mount"></div>
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="tb-title">Help &amp; Support</div>
+        <div style="font-size:13px;color:var(--muted)">Student User Manual</div>
+      </div>
+      <div class="tb-right">
+        <span class="version-badge">📘 Manual v1.0</span>
+      </div>
+    </div>
+
+    <div class="pg">
+
+      <!-- Hero -->
+      <div class="help-hero">
+        <h1>StokvelX Student User Manual</h1>
+        <p>Everything you need to know about saving, paying, and growing your money with your circle. Read through the sections below or search for a specific topic.</p>
+      </div>
+
+      <!-- Search -->
+      <div class="help-search">
+        <input type="text" id="helpSearch" placeholder="🔍  Search the manual… e.g. 'how to pay', 'referral bonus', 'withdraw'">
+      </div>
+
+      <div class="help-grid">
+
+        <!-- Table of Contents -->
+        <div class="help-toc" id="helpToc">
+          <h3>Contents</h3>
+          <button class="toc-item active" onclick="scrollToSection('s1')"><span class="toc-num">1</span>Getting Started</button>
+          <button class="toc-item" onclick="scrollToSection('s2')"><span class="toc-num">2</span>Your Dashboard</button>
+          <button class="toc-item" onclick="scrollToSection('s3')"><span class="toc-num">3</span>Joining a Circle</button>
+          <button class="toc-item" onclick="scrollToSection('s4')"><span class="toc-num">4</span>Making Payments</button>
+          <button class="toc-item" onclick="scrollToSection('s5')"><span class="toc-num">5</span>Your Wallet</button>
+          <button class="toc-item" onclick="scrollToSection('s6')"><span class="toc-num">6</span>Payouts</button>
+          <button class="toc-item" onclick="scrollToSection('s7')"><span class="toc-num">7</span>Referrals &amp; Bonuses</button>
+          <button class="toc-item" onclick="scrollToSection('s8')"><span class="toc-num">8</span>Circle Chat</button>
+          <button class="toc-item" onclick="scrollToSection('s9')"><span class="toc-num">9</span>Profile &amp; Settings</button>
+          <button class="toc-item" onclick="scrollToSection('s10')"><span class="toc-num">10</span>FAQs</button>
+          <button class="toc-item" onclick="scrollToSection('s11')"><span class="toc-num">11</span>Contact Support</button>
+        </div>
+
+        <!-- Manual Content -->
+        <div class="help-content" id="helpContent">
+
+          <!-- Section 1: Getting Started -->
+          <div class="help-section" id="s1">
+            <div class="help-section-hd open" onclick="toggleSection(this)">
+              <div class="s-ico" style="background:#dcfce7">🚀</div>
+              <h2>1. Getting Started</h2>
+              <span class="chev">▼</span>
+            </div>
+            <div class="help-section-body open">
+              <p style="font-size:14px;color:var(--muted);margin-bottom:20px">Welcome to StokvelX — South Africa's first student savings circle platform. Follow these steps to get your account up and running.</p>
+
+              <div class="help-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  <h4>Create your account</h4>
+                  <p>Go to the Sign Up page and complete all 3 steps: enter your personal details (name, email, phone), your student information (university, student number, ID number), and create a secure password. Your ID number is used for KYC verification only and is stored securely.</p>
+                </div>
+              </div>
+              <div class="help-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  <h4>Use a referral code (optional)</h4>
+                  <p>If a friend referred you, enter their referral code on Step 1 of sign-up. This earns them a R10 bonus once you make your first payment, and helps grow the StokvelX community.</p>
+                </div>
+              </div>
+              <div class="help-step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  <h4>Log in</h4>
+                  <p>After registering you are logged in automatically and taken to your Dashboard. On future visits, go to the Login page, enter your email and password, and click Login.</p>
+                </div>
+              </div>
+              <div class="help-step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                  <h4>Add a bank account</h4>
+                  <p>Go to <strong>Profile → Bank Details</strong> and enter your bank name and account number. This is required before you can withdraw money from your wallet to your bank account.</p>
+                </div>
+              </div>
+              <div class="help-tip">
+                <strong>💡 Pro Tip</strong>
+                Use a university email address (e.g. @uct.ac.za, @wits.ac.za) when signing up — it helps with KYC verification and builds trust within your circle.
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: Dashboard -->
+          <div class="help-section" id="s2">
+            <div class="help-section-hd" onclick="toggleSection(this)">
+              <div class="s-ico" style="background:#dbeafe">🏠</div>
+              <h2>2. Your Dashboard</h2>
+              <span class="chev">▼</span>
+            </div>
+            <div class="help-section-body">
+              <p style="font-size:14px;color:var(--muted);margin-bottom:20px">Your Dashboard is the first page you see after logging in. It gives you a real-time snapshot of your finances.</p>
+
+              <div class="shortcut-grid" style="margin-bottom:20px">
+                <div class="shortcut-card">
+                  <div class="sc-ico">💰</div>
+                  <div><h4>Wallet Balance</h4><p>Your current available balance. Money you've deposited, received as payouts, or earned from referrals.</p></div>
+                </div>
+                <div class="shortcut-card">
+                  <div class="sc-ico">🔵</div>
+                  <div><h4>Active Circles</h4><p>How many savings circles you currently belong to. Tap to go to My Circles.</p></div>
+                </div>
+                <div class="shortcut-card">
+                  <div class="sc-ico">🎉</div>
+                  <div><h4>Next Payout</h4><p>The amount and date of your next scheduled payout across all your circles.</p></div>
+                </div>
+                <div class="shortcut-card">
+                  <div class="sc-ico">👥</div>
+                  <div><h4>Referral Earnings</h4><p>Total bonus money earned from friends who joined StokvelX using your code.</p></div>
+                </div>
+              </div>
+
+              <div class="help-step">
+                <div class="step-num">→</div>
+                <div class="step-content">
+                  <h4>Recent Transactions</h4>
+                  <p>The bottom of your Dashboard shows your 5 most recent wallet transactions. Click <strong>View All</strong> or go to <strong>Transactions</strong> in the sidebar for the full history.</p>
+                </div>
+              </div>
+              <div class="help-step">
+                <div class="step-num">→</div>
+                <div class="step-content">
+                  <h4>Quick Pay button</h4>
+                  <p>If you have a pending contribution due, a <strong>Pay Now</strong> button appears on the Dashboard. Tapping it opens the payment modal for your next unpaid contribution.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 3: Joining a Circle -->
+          <div class="help-section" id="s3">
+            <div class="help-section-hd" onclick="toggleSection(this)">
+              <div class="s-ico" style="background:#f3e8ff">➕</div>
+              <h2>3. Joining a Circle</h2>
+              <span class="chev">▼</span>
+            </div>
+            <div class="help-section-body">
+              <p style="font-size:14px;color:var(--muted);margin-bottom:20px">A <strong>savings circle</strong> (stokvel) is a group of people who each contribute a fixed amount every week. One member receives the full pot each week, rotating through all positions.</p>
+
+              <div class="help-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  <h4>Browse available circles</h4>
+                  <p>Click <strong>Join a Circle</strong> in the sidebar. You'll see all open circles with details: weekly contribution amount, number of members, spots available, net payout, and duration.</p>
+                </div>
+              </div>
+              <div class="help-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  <h4>Filter by type</h4>
+                  <p>Use the filter tabs to narrow circles by type: <strong>Standard</strong> (classic rotating), <strong>Premium</strong> (fast-payout with priority positions), or <strong>Investment</strong> (longer cycle, higher returns).</p>
+                </div>
+              </div>
+              <div class="help-step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  <h4>Click "Join Circle"</h4>
+                  <p>Once you've chosen a circle, click <strong>Join Circle</strong>. You'll be added at the next available position. A pending contribution is created immediately — pay it to confirm your spot.</p>
+                </div>
+              </div>
+              <div class="help-step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                  <h4>Pay your first contribution</h4>
+                  <p>Go to <strong>My Circles</strong> and click the <strong>Pay Contribution</strong> button. Choose wallet, EFT, card, or Ozow as your payment method.</p>
+                </div>
+              </div>
+
+              <div class="help-warn">
+                <strong>⚠️ Important</strong>
+                You cannot join a circle that is already full (all positions taken). Check the "Spots Left" indicator before attempting to join.
+              </div>
+
+              <h3 style="font-size:14px;font-weight:700;margin:20px 0 12px">Circle Types Explained</h3>
+              <table style="width:100%;border-collapse:collapse;font-size:13px">
+                <thead>
+                  <tr style="background:var(--surface)">
+                    <th style="padding:10px 12px;text-align:left;border:1px solid var(--border)">Type</th>
+                    <th style="padding:10px 12px;text-align:left;border:1px solid var(--border)">Weekly</th>
+                    <th style="padding:10px 12px;text-align:left;border:1px solid var(--border)">Duration</th>
+                    <th style="padding:10px 12px;text-align:left;border:1px solid var(--border)">Best For</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="padding:10px 12px;border:1px solid var(--border)"><span style="background:#f3f4f6;padding:2px 8px;border-radius:6px;font-weight:600">Standard</span></td>
+                    <td style="padding:10px 12px;border:1px solid var(--border)">R150 – R300</td>
+                    <td style="padding:10px 12px;border:1px solid var(--border)">8–10 weeks</td>
+                    <td style="padding:10px 12px;border:1px solid var(--border)">First-time savers</td>
+                  </tr>
+                  <tr style="background:var(--surface)">
+                    <td style="padding:10px 12px;border:1px solid var(--border)"><span style="background:#f3e8ff;color:#7c3aed;padding:2px 8px;border-radius:6px;font-weight:600">Premium</span></td>
+                    <td style="padding:10px 12px;border:1px solid var(--border)">R400+</td>
+                    <td style="padding:10px 12px;border:1px solid var(--border)">10 weeks</td>
+                    <td style="padding:10px 12px;border:1px solid var(--border)">Priority payout</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:10px 12px;border:1px solid var(--border)"><span style="background:#dcfce7;color:#059669;padding:2px 8px;border-radius:6px;font-weight:600">Investment</span></td>
+                    <td style="padding:10px 12px;border:1px solid var(--border)">R500+</td>
+                    <td style="padding:10px 12px;border:1px solid var(--border)">24 weeks</td>
+                    <td style="padding:10px 12px;border:1px solid var(--border)">Long-term goals</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Section 4: Making Payments -->
+          <div class="help-section" id="s4">
+            <div class="help-section-hd" onclick="toggleSection(this)">
+              <div class="s-ico" style="background:#fef9c3">💳</div>
+              <h2>4. Making Payments</h2>
+              <span class="chev">▼</span>
+            </div>
+            <div class="help-section-body">
+              <p style="font-size:14px;color:var(--muted);margin-bottom:20px">Contributions must be paid every week by the due date. You can see your due dates on the <strong>My Circles</strong> page and on your Dashboard.</p>
+
+              <div class="help-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  <h4>Go to My Circles</h4>
+                  <p>Click <strong>My Circles</strong> in the sidebar. Each circle shows your current week, due date, and whether your contribution is <span style="background:#dcfce7;color:#16a34a;padding:1px 8px;border-radius:20px;font-size:12px;font-weight:600">Paid</span>, <span style="background:#fef9c3;color:#b45309;padding:1px 8px;border-radius:20px;font-size:12px;font-weight:600">Pending</span>, or <span style="background:#fee2e2;color:#dc2626;padding:1px 8px;border-radius:20px;font-size:12px;font-weight:600">Late</span>.</p>
+                </div>
+              </div>
+              <div class="help-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  <h4>Click "Pay Contribution"</h4>
+                  <p>Click the green <strong>Pay Contribution</strong> button on the circle card. The payment modal will show the amount due for the current week.</p>
+                </div>
+              </div>
+              <div class="help-step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  <h4>Choose your payment method</h4>
+                  <p>Select one of four options: <strong>Wallet</strong> (instant, deducted from your balance), <strong>EFT</strong> (bank transfer, 1–2 days), <strong>Card</strong> (debit/credit), or <strong>Ozow</strong> (instant EFT).</p>
+                </div>
+              </div>
+              <div class="help-step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                  <h4>Confirm payment</h4>
+                  <p>After confirming, your contribution status updates to <span style="background:#dcfce7;color:#16a34a;padding:1px 8px;border-radius:20px;font-size:12px;font-weight:600">Paid</span> instantly. The transaction also appears in your wallet history.</p>
+                </div>
+              </div>
+
+              <div class="help-tip">
+                <strong>💡 Wallet Payments are Fastest</strong>
+                Paying from your StokvelX wallet updates your status immediately. Top up your wallet in advance so you can pay with one click every week.
+              </div>
+              <div class="help-warn">
+                <strong>⚠️ Late Payments</strong>
+                If you miss a payment deadline, your status changes to <strong>Late</strong>. You can still pay after the deadline, but late contributions may affect your standing in future circles. Pay on time to maintain a good reputation.
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 5: Wallet -->
+          <div class="help-section" id="s5">
+            <div class="help-section-hd" onclick="toggleSection(this)">
+              <div class="s-ico" style="background:#dcfce7">💰</div>
+              <h2>5. Your Wallet</h2>
+              <span class="chev">▼</span>
+            </div>
+            <div class="help-section-body">
+              <p style="font-size:14px;color:var(--muted);margin-bottom:20px">Your StokvelX wallet is your central money hub. It holds your balance, receives payouts and referral bonuses, and lets you pay contributions instantly.</p>
+
+              <h3 style="font-size:14px;font-weight:700;margin-bottom:14px">Adding Money to Your Wallet</h3>
+              <div class="help-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  <h4>Click "Add Money" on the Wallet page</h4>
+                  <p>Navigate to <strong>Wallet</strong> in the sidebar. Click the <strong>Add Money</strong> button.</p>
+                </div>
+              </div>
+              <div class="help-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  <h4>Enter the amount</h4>
+                  <p>Type the amount you want to add. Minimum top-up is <strong>R10</strong>, maximum is <strong>R50,000</strong> per transaction.</p>
+                </div>
+              </div>
+              <div class="help-step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  <h4>Choose your method and confirm</h4>
+                  <p>Select EFT, Card, or Ozow. Confirm and the funds will reflect in your wallet balance.</p>
+                </div>
+              </div>
+
+              <h3 style="font-size:14px;font-weight:700;margin:20px 0 14px">Withdrawing Money</h3>
+              <div class="help-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  <h4>Add a bank account first</h4>
+                  <p>Go to <strong>Profile</strong> and fill in your bank name and account number. You cannot withdraw without a saved bank account.</p>
+                </div>
+              </div>
+              <div class="help-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  <h4>Click "Withdraw" on the Wallet page</h4>
+                  <p>Enter the amount (minimum R50). Your funds will be sent to your saved bank account within <strong>1–2 business days</strong>.</p>
+                </div>
+              </div>
+
+              <div class="help-info">
+                <strong>ℹ️ What goes into your wallet automatically?</strong>
+                When you receive a circle payout, the money lands directly in your StokvelX wallet. Referral bonuses are also credited automatically. You can leave the money in your wallet to pay future contributions, or withdraw it to your bank.
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 6: Payouts -->
+          <div class="help-section" id="s6">
+            <div class="help-section-hd" onclick="toggleSection(this)">
+              <div class="s-ico" style="background:#fef9c3">🎉</div>
+              <h2>6. Payouts</h2>
+              <span class="chev">▼</span>
+            </div>
+            <div class="help-section-body">
+              <p style="font-size:14px;color:var(--muted);margin-bottom:20px">A payout is when the full week's contributions from all circle members are given to one member. Every member gets one payout during the cycle.</p>
+
+              <div class="help-step">
+                <div class="step-num">→</div>
+                <div class="step-content">
+                  <h4>How payout amounts are calculated</h4>
+                  <p>Net Payout = (<strong>Weekly Contribution</strong> − <strong>Admin Fee</strong>) × <strong>Max Members</strong><br>
+                  Example: (R250 − R10) × 10 members = <strong>R2,400</strong></p>
+                </div>
+              </div>
+              <div class="help-step">
+                <div class="step-num">→</div>
+                <div class="step-content">
+                  <h4>Your payout position</h4>
+                  <p>Positions are assigned when you join. You can see your position on the <strong>My Circles</strong> page (e.g. "Position 4 of 10"). Position 4 means you receive the payout in week 4 of the cycle.</p>
+                </div>
+              </div>
+              <div class="help-step">
+                <div class="step-num">→</div>
+                <div class="step-content">
+                  <h4>Payout statuses</h4>
+                  <p>
+                    <span style="background:#dcfce7;color:#16a34a;padding:1px 8px;border-radius:20px;font-size:12px;font-weight:600">Paid</span> — You've received this payout already.<br><br>
+                    <span style="background:#dbeafe;color:#1e40af;padding:1px 8px;border-radius:20px;font-size:12px;font-weight:600">Upcoming</span> — Your payout is the next one scheduled (within 1–2 weeks).<br><br>
+                    <span style="background:#f3f4f6;color:#6b7280;padding:1px 8px;border-radius:20px;font-size:12px;font-weight:600">Pending</span> — Scheduled for a future week, not yet imminent.
+                  </p>
+                </div>
+              </div>
+              <div class="help-step">
+                <div class="step-num">→</div>
+                <div class="step-content">
+                  <h4>Where does payout money go?</h4>
+                  <p>Payout funds are credited directly to your <strong>StokvelX wallet</strong>. You'll see a "Payout received" entry in your transaction history. You can then withdraw to your bank account at any time.</p>
+                </div>
+              </div>
+
+              <div class="help-tip">
+                <strong>💡 Stay Paid Up to Keep Your Payout Date</strong>
+                Your payout date is guaranteed as long as all members stay up to date. Encourage your circle members to pay on time so the rotation runs smoothly.
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 7: Referrals -->
+          <div class="help-section" id="s7">
+            <div class="help-section-hd" onclick="toggleSection(this)">
+              <div class="s-ico" style="background:#fee2e2">👥</div>
+              <h2>7. Referrals &amp; Bonuses</h2>
+              <span class="chev">▼</span>
+            </div>
+            <div class="help-section-body">
+              <p style="font-size:14px;color:var(--muted);margin-bottom:20px">Earn extra money by inviting your friends and classmates to join StokvelX. Every successful referral puts cash in your wallet.</p>
+
+              <div class="help-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  <h4>Find your referral code</h4>
+                  <p>Go to <strong>Referrals</strong> in the sidebar. Your unique referral code is displayed at the top (e.g. <code style="background:#f3f4f6;padding:2px 6px;border-radius:4px;font-family:monospace">SIPHO10</code>).</p>
+                </div>
+              </div>
+              <div class="help-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  <h4>Share your link</h4>
+                  <p>Click <strong>Copy Referral Link</strong> to get your personal sign-up link. Share it via WhatsApp, Instagram, email, or anywhere your classmates will see it.</p>
+                </div>
+              </div>
+              <div class="help-step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  <h4>Your friend signs up and joins a circle</h4>
+                  <p>Your friend registers using your code. Their status shows as <strong>Pending</strong> in your referrals list until they make their first contribution payment.</p>
+                </div>
+              </div>
+              <div class="help-step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                  <h4>Earn R10 per paid referral</h4>
+                  <p>Once your friend makes their <strong>first ever contribution</strong>, you automatically earn <strong>R10</strong> credited to your wallet. No action needed — it's instant.</p>
+                </div>
+              </div>
+
+              <div class="help-tip">
+                <strong>🏆 Milestone Bonus — R50 for 10 Referrals!</strong>
+                Once 10 of your referred friends have made their first contribution, you receive a one-off <strong>R50 milestone bonus</strong> on top of your regular referral earnings. That's R150 total for 10 referrals.
+              </div>
+
+              <h3 style="font-size:14px;font-weight:700;margin:20px 0 10px">Referral Earnings Summary</h3>
+              <table style="width:100%;border-collapse:collapse;font-size:13px">
+                <thead><tr style="background:var(--surface)">
+                  <th style="padding:10px;text-align:left;border:1px solid var(--border)">Milestone</th>
+                  <th style="padding:10px;text-align:left;border:1px solid var(--border)">Bonus</th>
+                </tr></thead>
+                <tbody>
+                  <tr><td style="padding:10px;border:1px solid var(--border)">Each paid referral</td><td style="padding:10px;border:1px solid var(--border);color:var(--green);font-weight:700">+R10</td></tr>
+                  <tr style="background:var(--surface)"><td style="padding:10px;border:1px solid var(--border)">10 paid referrals milestone</td><td style="padding:10px;border:1px solid var(--border);color:var(--green);font-weight:700">+R50 (once)</td></tr>
+                  <tr><td style="padding:10px;border:1px solid var(--border)">10 referrals total earnings</td><td style="padding:10px;border:1px solid var(--border);color:var(--green);font-weight:700">R150</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Section 8: Chat -->
+          <div class="help-section" id="s8">
+            <div class="help-section-hd" onclick="toggleSection(this)">
+              <div class="s-ico" style="background:#e0f2fe">💬</div>
+              <h2>8. Circle Chat</h2>
+              <span class="chev">▼</span>
+            </div>
+            <div class="help-section-body">
+              <p style="font-size:14px;color:var(--muted);margin-bottom:20px">Each circle has its own group chat where members can communicate, confirm payments, and support each other.</p>
+
+              <div class="help-step">
+                <div class="step-num">→</div>
+                <div class="step-content">
+                  <h4>Accessing chat</h4>
+                  <p>Click <strong>Circle Chat</strong> in the sidebar. Your circles appear in the left panel — click any circle name to switch to that chat.</p>
+                </div>
+              </div>
+              <div class="help-step">
+                <div class="step-num">→</div>
+                <div class="step-content">
+                  <h4>Sending messages</h4>
+                  <p>Type your message in the input box at the bottom and press <strong>Enter</strong> or click the send button (➤). Messages are visible to all members of that circle only.</p>
+                </div>
+              </div>
+              <div class="help-step">
+                <div class="step-num">→</div>
+                <div class="step-content">
+                  <h4>New messages load automatically</h4>
+                  <p>The chat polls for new messages every 5 seconds. You don't need to refresh the page to see new messages from your circle members.</p>
+                </div>
+              </div>
+              <div class="help-warn">
+                <strong>⚠️ Chat Etiquette</strong>
+                Keep conversations respectful and relevant to your circle. Reminders about payment deadlines and payout confirmations are always welcome. Avoid sharing personal banking details in the chat.
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 9: Profile & Settings -->
+          <div class="help-section" id="s9">
+            <div class="help-section-hd" onclick="toggleSection(this)">
+              <div class="s-ico" style="background:#f3e8ff">👤</div>
+              <h2>9. Profile &amp; Settings</h2>
+              <span class="chev">▼</span>
+            </div>
+            <div class="help-section-body">
+              <p style="font-size:14px;color:var(--muted);margin-bottom:20px">Keep your profile up to date so your circle members and the platform can identify you correctly.</p>
+
+              <h3 style="font-size:14px;font-weight:700;margin-bottom:14px">Updating Your Profile</h3>
+              <div class="help-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  <h4>Go to Profile</h4>
+                  <p>Click <strong>Profile</strong> in the sidebar. You'll see your current personal information and bank details.</p>
+                </div>
+              </div>
+              <div class="help-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  <h4>Edit your details</h4>
+                  <p>You can update: First name, last name, phone number, university, and student number. Your email address cannot be changed after registration.</p>
+                </div>
+              </div>
+              <div class="help-step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  <h4>Update bank details</h4>
+                  <p>Enter your bank name and account number in the Bank Details section. This is required before you can withdraw money. Only one bank account can be saved at a time.</p>
+                </div>
+              </div>
+              <div class="help-step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                  <h4>Change your password</h4>
+                  <p>Scroll to the Password section. Enter your current password, then your new password (minimum 6 characters). Click <strong>Save Changes</strong> to update.</p>
+                </div>
+              </div>
+              <div class="help-tip">
+                <strong>💡 Click "Save Changes" to apply updates</strong>
+                Changes are not saved automatically. Always click the <strong>Save Changes</strong> button after editing your profile or bank details.
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 10: FAQs -->
+          <div class="help-section" id="s10">
+            <div class="help-section-hd" onclick="toggleSection(this)">
+              <div class="s-ico" style="background:#fef9c3">❓</div>
+              <h2>10. Frequently Asked Questions</h2>
+              <span class="chev">▼</span>
+            </div>
+            <div class="help-section-body">
+
+              <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">What happens if I can't pay my contribution on time? <span class="faq-chev">▼</span></div>
+                <div class="faq-a">Your contribution status changes to <strong>Late</strong>. You can still pay after the deadline — the system will accept it. However, consistently late payments may affect your eligibility for future premium circles. Always communicate with your circle members via chat if you're having difficulties.</div>
+              </div>
+
+              <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">Can I be in more than one circle at the same time? <span class="faq-chev">▼</span></div>
+                <div class="faq-a">Yes! You can join multiple circles simultaneously. Each circle has its own contribution schedule and payout date. Your Dashboard shows a combined view of all your circles and upcoming obligations.</div>
+              </div>
+
+              <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">How long does a wallet withdrawal take? <span class="faq-chev">▼</span></div>
+                <div class="faq-a">Withdrawals are processed within <strong>1–2 business days</strong>. The funds are sent to the bank account you've saved in your Profile. Make sure your account details are correct before withdrawing.</div>
+              </div>
+
+              <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">What is KYC verification and why do I need it? <span class="faq-chev">▼</span></div>
+                <div class="faq-a"><strong>KYC</strong> stands for Know Your Customer. It's a regulatory requirement for financial platforms. Your ID number is used to verify your identity. Verified accounts have full access to all features including withdrawals. Unverified accounts may have limited access.</div>
+              </div>
+
+              <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">Can I leave a circle once I've joined? <span class="faq-chev">▼</span></div>
+                <div class="faq-a">Leaving a circle mid-cycle is not recommended as it disrupts other members' payout schedule. If you have an urgent need to leave, contact support. If you have already received your payout, you're expected to continue contributing until the cycle completes.</div>
+              </div>
+
+              <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">Why is my referral showing as "Pending"? <span class="faq-chev">▼</span></div>
+                <div class="faq-a">A referral stays <strong>Pending</strong> until your friend makes their <strong>first contribution payment</strong> in a circle. Simply signing up is not enough — they need to actually join a circle and pay their first weekly contribution. Once they do, your bonus of R10 is credited automatically.</div>
+              </div>
+
+              <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">Is my money safe on StokvelX? <span class="faq-chev">▼</span></div>
+                <div class="faq-a">All financial transactions are recorded and logged in full. Your wallet balance is stored securely in the database and every debit and credit is tracked. Payout amounts are calculated mathematically based on actual contributions received — there is no guesswork.</div>
+              </div>
+
+              <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">I forgot my password. How do I reset it? <span class="faq-chev">▼</span></div>
+                <div class="faq-a">Currently, password resets are handled by contacting support at <strong>support@stokvelx.co.za</strong>. If you're already logged in, go to <strong>Profile → Change Password</strong> to update your password at any time.</div>
+              </div>
+
+              <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">What is the admin fee and who gets it? <span class="faq-chev">▼</span></div>
+                <div class="faq-a">The admin fee (typically R10 per contribution) is deducted from each member's weekly contribution before the payout pot is calculated. It goes to StokvelX to cover platform operating costs, development, and support. The net payout you receive is after this fee has been deducted.</div>
+              </div>
+
+              <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">Can I pay for multiple weeks at once? <span class="faq-chev">▼</span></div>
+                <div class="faq-a">Currently the system processes one contribution per week per circle. You pay the current week's contribution and next week's will become due after the week advances. This keeps the circle rotation fair and transparent for all members.</div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Section 11: Contact -->
+          <div class="help-section" id="s11">
+            <div class="help-section-hd" onclick="toggleSection(this)">
+              <div class="s-ico" style="background:#dcfce7">📞</div>
+              <h2>11. Contact Support</h2>
+              <span class="chev">▼</span>
+            </div>
+            <div class="help-section-body">
+              <p style="font-size:14px;color:var(--muted);margin-bottom:20px">Still stuck? Our support team is made up of fellow students who understand your situation. We're here to help.</p>
+
+              <div class="contact-grid" style="margin-bottom:24px">
+                <div class="contact-card">
+                  <div class="cc-ico">📧</div>
+                  <h4>Email Support</h4>
+                  <p>support@stokvelx.co.za<br>Response within 24 hours</p>
+                </div>
+                <div class="contact-card">
+                  <div class="cc-ico">💬</div>
+                  <h4>WhatsApp</h4>
+                  <p>+27 81 000 0000<br>Mon–Fri, 8am–6pm</p>
+                </div>
+                <div class="contact-card">
+                  <div class="cc-ico">🐦</div>
+                  <h4>Social Media</h4>
+                  <p>@StokvelX on Twitter/X<br>DMs open to all users</p>
+                </div>
+              </div>
+
+              <div class="help-info">
+                <strong>ℹ️ Before contacting support, please:</strong>
+                Check this manual first — most common questions are answered in the FAQ section above. When you do write to us, include your registered email address and a brief description of the issue so we can assist you faster.
+              </div>
+
+              <h3 style="font-size:14px;font-weight:700;margin:20px 0 12px">Report a Bug or Give Feedback</h3>
+              <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Found something broken or have a feature suggestion? We love hearing from students. Email us at <strong>feedback@stokvelx.co.za</strong> or DM us on WhatsApp.</p>
+
+              <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:20px;text-align:center">
+                <div style="font-size:32px;margin-bottom:8px">🙌</div>
+                <h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:6px">Thank you for using StokvelX</h3>
+                <p style="font-size:13px;color:var(--muted)">Built by students, for students. Keep saving, keep growing.</p>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- end help-content -->
+      </div><!-- end help-grid -->
+    </div><!-- end pg -->
+  </div><!-- end main -->
+</div><!-- end app-wrap -->
+<div id="mobnav-mount"></div>
+<div id="toast" class="toast"></div>
+
+<script src="../js/api.js"></script>
+<script src="../js/nav.js"></script>
+<script src="../js/main.js"></script>
+<script>
+// Auth guard
+(async () => {
+  const user = await requireAuth();
+  if (!user) return;
+  document.querySelectorAll('.nm').forEach(el => el.textContent = user.first_name + ' ' + user.last_name);
+  document.querySelectorAll('.u-av').forEach(el => el.textContent = user.first_name[0] + user.last_name[0]);
+})();
+
+// Toggle section open/close
+function toggleSection(hd) {
+  hd.classList.toggle('open');
+  const body = hd.nextElementSibling;
+  body.classList.toggle('open');
+  // Update TOC active state
+  const sectionId = hd.closest('.help-section').id;
+  document.querySelectorAll('.toc-item').forEach(t => t.classList.remove('active'));
+  document.querySelector(`.toc-item[onclick*="${sectionId}"]`)?.classList.add('active');
+}
+
+// Scroll to a section and open it
+function scrollToSection(id) {
+  const section = document.getElementById(id);
+  if (!section) return;
+  const hd = section.querySelector('.help-section-hd');
+  const body = section.querySelector('.help-section-body');
+  if (!hd.classList.contains('open')) { hd.classList.add('open'); body.classList.add('open'); }
+  section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('.toc-item').forEach(t => t.classList.remove('active'));
+  document.querySelector(`.toc-item[onclick*="${id}"]`)?.classList.add('active');
+}
+
+// FAQ toggle
+function toggleFaq(el) {
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('open');
+}
+
+// Search
+document.getElementById('helpSearch').addEventListener('input', function() {
+  const q = this.value.trim().toLowerCase();
+  if (!q) {
+    document.querySelectorAll('.help-section').forEach(s => s.style.display = '');
+    return;
+  }
+  document.querySelectorAll('.help-section').forEach(s => {
+    const text = s.textContent.toLowerCase();
+    s.style.display = text.includes(q) ? '' : 'none';
+    if (text.includes(q)) {
+      // Auto-open matching sections
+      const hd   = s.querySelector('.help-section-hd');
+      const body = s.querySelector('.help-section-body');
+      hd.classList.add('open');
+      body.classList.add('open');
+    }
+  });
+});
+</script>
+</body>
+</html>

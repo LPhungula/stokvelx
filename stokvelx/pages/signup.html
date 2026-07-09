@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sign Up – StokvelX</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="auth-pg">
+  <div class="auth-left">
+    <div class="auth-brand"><div class="logo-icon" style="width:34px;height:34px;background:var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:16px;">X</div>StokvelX</div>
+    <h2>Join your<br>savings <span>circle</span><br>today 🌱</h2>
+    <p>Over 5,000 students are already growing their money with StokvelX. Takes under 2 minutes to get started.</p>
+  </div>
+  <div class="auth-right">
+    <div class="auth-box">
+      <h2>Create account</h2>
+      <p class="auth-sub">Step <span id="stepNum">1</span> of 3</p>
+      <div class="step-dots">
+        <div class="sdot active" id="d1"></div>
+        <div class="sdot" id="d2"></div>
+        <div class="sdot" id="d3"></div>
+      </div>
+      <div id="signup-error" style="display:none;background:#fee2e2;color:#dc2626;padding:10px 14px;border-radius:8px;font-size:14px;margin-bottom:14px;"></div>
+
+      <!-- Step 1 -->
+      <div id="step1">
+        <div class="fg2">
+          <div class="fg"><label class="fl">First Name</label><input id="s-fname" class="fi" type="text" placeholder="Sipho"></div>
+          <div class="fg"><label class="fl">Last Name</label><input id="s-lname" class="fi" type="text" placeholder="Dlamini"></div>
+        </div>
+        <div class="fg"><label class="fl">Phone Number</label><input id="s-phone" class="fi" type="tel" placeholder="+27 81 234 5678"></div>
+        <div class="fg"><label class="fl">Email Address</label><input id="s-email" class="fi" type="email" placeholder="sipho@student.ac.za"></div>
+        <div class="fg"><label class="fl">Referral Code (optional)</label><input id="s-ref" class="fi" type="text" placeholder="e.g. SIPHO10"></div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="goStep(2)">Continue →</button>
+      </div>
+
+      <!-- Step 2 -->
+      <div id="step2" style="display:none">
+        <div class="fg"><label class="fl">University / Institution</label>
+          <select id="s-uni" class="fi">
+            <option value="University of Cape Town (UCT)">University of Cape Town (UCT)</option>
+            <option value="Wits University">Wits University</option>
+            <option value="University of Pretoria (UP)">University of Pretoria (UP)</option>
+            <option value="Stellenbosch University">Stellenbosch University</option>
+            <option value="UKZN">UKZN</option>
+            <option value="UWC">UWC</option>
+            <option value="DUT">Durban University of Technology</option>
+            <option value="CPUT">Cape Peninsula University of Technology</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl">Student Number</label><input id="s-studno" class="fi" type="text" placeholder="STUD2024001"></div>
+        <div class="fg"><label class="fl">ID Number (KYC verification)</label><input id="s-idno" class="fi" type="text" placeholder="9001015000000"></div>
+        <div style="background:var(--green-light);border-radius:10px;padding:14px;margin-bottom:18px;font-size:13px;color:var(--green-dark)">
+          🔒 Your ID number is used for KYC verification only and is stored securely. No document upload required.
+        </div>
+        <div style="display:flex;gap:12px">
+          <button class="btn btn-outline" style="flex:1;justify-content:center" onclick="goStep(1)">← Back</button>
+          <button class="btn btn-primary" style="flex:2;justify-content:center" onclick="goStep(3)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div id="step3" style="display:none">
+        <div class="fg"><label class="fl">Create Password</label><input id="s-pass" class="fi" type="password" placeholder="••••••••"></div>
+        <div class="fg"><label class="fl">Confirm Password</label><input id="s-pass2" class="fi" type="password" placeholder="••••••••"></div>
+        <div style="background:#f8fafb;border-radius:10px;padding:14px;margin-bottom:18px">
+          <p style="font-size:13px;font-weight:600;margin-bottom:8px">By creating an account you agree to:</p>
+          <label style="display:flex;gap:8px;font-size:13px;align-items:flex-start;margin-bottom:6px"><input type="checkbox" checked> Terms of Service &amp; Privacy Policy</label>
+          <label style="display:flex;gap:8px;font-size:13px;align-items:flex-start"><input type="checkbox" checked> Receive contribution reminders via SMS/email</label>
+        </div>
+        <div style="display:flex;gap:12px">
+          <button class="btn btn-outline" style="flex:1;justify-content:center" onclick="goStep(2)">← Back</button>
+          <button id="register-btn" class="btn btn-primary" style="flex:2;justify-content:center">🎉 Create Account</button>
+        </div>
+      </div>
+
+      <p style="text-align:center;font-size:14px;color:var(--muted);margin-top:20px">Already have an account? <a href="login.html" style="color:var(--green);font-weight:600">Login</a></p>
+    </div>
+  </div>
+</div>
+<script src="../js/api.js"></script>
+<script src="../js/main.js"></script>
+<script>
+function goStep(n) {
+  const errEl = document.getElementById('signup-error');
+  // Basic step-1 validation before advancing
+  if (n === 2) {
+    if (!document.getElementById('s-fname').value.trim() || !document.getElementById('s-lname').value.trim()) {
+      errEl.textContent = 'Please enter your first and last name.';
+      errEl.style.display = 'block'; return;
+    }
+    if (!document.getElementById('s-email').value.trim()) {
+      errEl.textContent = 'Please enter your email address.';
+      errEl.style.display = 'block'; return;
+    }
+  }
+  errEl.style.display = 'none';
+  document.querySelectorAll('#step1,#step2,#step3').forEach(s => s.style.display = 'none');
+  document.getElementById('step' + n).style.display = 'block';
+  document.getElementById('stepNum').textContent = n;
+  ['d1','d2','d3'].forEach((id, i) => {
+    const d = document.getElementById(id);
+    d.className = 'sdot' + (i + 1 < n ? ' done' : i + 1 === n ? ' active' : '');
+  });
+}
+
+document.getElementById('register-btn').addEventListener('click', async () => {
+  const errEl = document.getElementById('signup-error');
+  const btn   = document.getElementById('register-btn');
+  const pass  = document.getElementById('s-pass').value;
+  const pass2 = document.getElementById('s-pass2').value;
+
+  if (pass.length < 6) {
+    errEl.textContent = 'Password must be at least 6 characters.';
+    errEl.style.display = 'block'; return;
+  }
+  if (pass !== pass2) {
+    errEl.textContent = 'Passwords do not match.';
+    errEl.style.display = 'block'; return;
+  }
+
+  btn.textContent = 'Creating account…';
+  btn.disabled = true;
+
+  const payload = {
+    first_name:     document.getElementById('s-fname').value.trim(),
+    last_name:      document.getElementById('s-lname').value.trim(),
+    email:          document.getElementById('s-email').value.trim(),
+    phone:          document.getElementById('s-phone').value.trim(),
+    university:     document.getElementById('s-uni').value,
+    student_number: document.getElementById('s-studno').value.trim(),
+    id_number:      document.getElementById('s-idno').value.trim(),
+    referral_code:  document.getElementById('s-ref').value.trim(),
+    password: pass,
+  };
+
+  const data = await api('auth/register', 'POST', payload);
+  if (data.success) {
+    window.location.href = 'dashboard.html';
+  } else {
+    errEl.textContent = data.message || 'Registration failed. Please try again.';
+    errEl.style.display = 'block';
+    btn.textContent = '🎉 Create Account';
+    btn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wallet – StokvelX</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="app-wrap">
+  <div id="sidebar-mount"></div>
+  <div class="main">
+    <div class="topbar"><div class="tb-title">Wallet</div>
+      <div class="tb-right"><button class="btn btn-primary btn-sm" data-withdraw="true">Withdraw</button></div>
+    </div>
+    <div class="pg">
+      <!-- Balance Card -->
+      <div class="wal-bal">
+        <div class="wb-lbl">Wallet Balance</div>
+        <div class="wb-amt">R1,250.00</div>
+        <div style="display:flex;gap:12px;position:relative">
+          <button class="btn btn-white btn-sm" data-withdraw="true">💸 Withdraw</button>
+          <button class="btn btn-outline-white btn-sm" data-modal="addMoneyModal">➕ Add Money</button>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="qa-row">
+        <div class="qa-item" data-modal="addMoneyModal"><div class="qa-ico">➕</div><div class="qa-lbl">Add Money</div></div>
+        <div class="qa-item"><div class="qa-ico">🏦</div><div class="qa-lbl">Bank Details</div></div>
+        <div class="qa-item"><div class="qa-ico">💳</div><div class="qa-lbl">Payment Methods</div></div>
+        <a href="transactions.html" class="qa-item" style="text-decoration:none"><div class="qa-ico">📋</div><div class="qa-lbl">History</div></a>
+      </div>
+
+      <!-- Transactions -->
+      <div class="wcard">
+        <div class="wcard-hd"><h3>Recent Transactions</h3><a href="transactions.html" class="view-all">View all →</a></div>
+        <ul class="tx-list">
+          <li class="tx-item"><div class="tx-ico si-g">🎁</div><div style="flex:1"><div class="tx-nm">Referral Bonus</div><div class="tx-mt">11 May 2024</div></div><div class="tx-amt cr">+R50.00</div></li>
+          <li class="tx-item"><div class="tx-ico si-o">💳</div><div style="flex:1"><div class="tx-nm">Contribution Payment</div><div class="tx-mt">Campus Builders · 17 May 2024</div></div><div class="tx-amt dr">-R250.00</div></li>
+          <li class="tx-item"><div class="tx-ico si-b">🎉</div><div style="flex:1"><div class="tx-nm">Payout Received</div><div class="tx-mt">Campus Connect · 10 May 2024</div></div><div class="tx-amt cr">+R1,500.00</div></li>
+          <li class="tx-item"><div class="tx-ico si-o">💳</div><div style="flex:1"><div class="tx-nm">Contribution Payment</div><div class="tx-mt">Future Leaders · 10 May 2024</div></div><div class="tx-amt dr">-R300.00</div></li>
+          <li class="tx-item"><div class="tx-ico si-g">🎁</div><div style="flex:1"><div class="tx-nm">Referral Bonus</div><div class="tx-mt">For: Thabo K. · 05 May 2024</div></div><div class="tx-amt cr">+R10.00</div></li>
+          <li class="tx-item"><div class="tx-ico" style="background:#fef2f2">💸</div><div style="flex:1"><div class="tx-nm">Withdrawal</div><div class="tx-mt">To FNB · 01 May 2024</div></div><div class="tx-amt dr">-R500.00</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="mobnav-mount"></div>
+
+<!-- Withdraw Modal -->
+<div class="modal-ov" id="withdrawModal">
+  <div class="modal">
+    <div class="modal-hd"><h3>Withdraw Funds</h3><button class="modal-cls">✕</button></div>
+    <div class="fg"><label class="fl">Amount</label><input class="fi" type="number" placeholder="R0.00" max="1250"></div>
+    <div class="fg"><label class="fl">Bank</label>
+      <select class="fi"><option>FNB – ***4521</option><option>Standard Bank</option><option>Capitec</option></select>
+    </div>
+    <div style="background:#f8fafb;border-radius:10px;padding:12px;margin-bottom:16px;font-size:13px;color:var(--muted)">⚡ Instant EFT · Usually within 5 minutes · R3 fee applies</div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="closeModal('withdrawModal');showToast('Withdrawal initiated! Funds arriving shortly. 💸')">Confirm Withdrawal</button>
+  </div>
+</div>
+
+<!-- Add Money Modal -->
+<div class="modal-ov" id="addMoneyModal">
+  <div class="modal">
+    <div class="modal-hd"><h3>Add Money</h3><button class="modal-cls">✕</button></div>
+    <div class="fg"><label class="fl">Amount</label><input class="fi" type="number" placeholder="R0.00"></div>
+    <div class="fg"><label class="fl">Payment Method</label>
+      <select class="fi"><option>EFT Bank Transfer</option><option>Credit/Debit Card</option><option>Instant EFT (Ozow)</option></select>
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="closeModal('addMoneyModal');showToast('Money added to wallet! ✅')">Add Money</button>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="../js/api.js"></script>
+<script src="../js/nav.js"></script>
+<script src="../js/main.js"></script>
+<script>
+(async () => {
+  const user = await requireAuth();
+  if (!user) return;
+  document.querySelectorAll('.nm').forEach(el => el.textContent = user.first_name + ' ' + user.last_name);
+  document.querySelectorAll('.u-av').forEach(el => el.textContent = user.first_name[0] + user.last_name[0]);
+
+  const data = await api('wallet/summary');
+  if (!data.success) return;
+
+  // Update balance display
+  document.querySelectorAll('[data-wallet-balance], .wallet-balance').forEach(el => el.textContent = formatRand(data.wallet_balance));
+  document.querySelectorAll('.st-val').forEach((el, i) => {
+    if (i === 0) el.textContent = formatRand(data.wallet_balance);
+    if (i === 1) el.textContent = formatRand(data.total_in);
+    if (i === 2) el.textContent = formatRand(data.total_out);
+  });
+  // Also update the main balance number — find it by looking for the large balance in wallet page
+  document.querySelectorAll('.wallet-hero-amount, [class*="balance"]').forEach(el => {
+    if (el.textContent.match(/R[\d,]/)) el.textContent = formatRand(data.wallet_balance);
+  });
+
+  // Bank details
+  if (data.bank_details) {
+    const b = data.bank_details;
+    document.querySelectorAll('.bank-name').forEach(el => el.textContent = b.bank_name);
+    document.querySelectorAll('.bank-acc').forEach(el => el.textContent = '****' + b.account_number.slice(-4));
+  }
+
+  // Load recent transactions into the wallet tx list
+  const txData = await api('transactions/list?limit=10');
+  if (txData.success) {
+    const list = document.querySelector('.tx-list');
+    if (list) {
+      list.innerHTML = txData.transactions.map(t => {
+        const sign = t.type === 'credit' ? '+' : '-';
+        const color = t.type === 'credit' ? 'var(--green)' : '#dc2626';
+        const icon = t.type === 'credit' ? '📥' : '📤';
+        return `<div class="tx-item">
+          <div class="tx-ico">${icon}</div>
+          <div class="tx-det"><div class="tx-name">${t.description}</div><div class="tx-meta">${formatDate(t.created_at)}</div></div>
+          <div class="tx-amt" style="color:${color}">${sign}${formatRand(t.amount)}</div>
+        </div>`;
+      }).join('') || '<div style="text-align:center;padding:30px;color:var(--muted)">No transactions yet.</div>';
+    }
+  }
+
+  // Add Money modal confirm
+  document.querySelector('#addMoneyModal .btn-primary, #addModal .btn-primary')?.addEventListener('click', async () => {
+    const amtInput = document.querySelector('#addMoneyModal input[type=number], #addModal input[type=number], #add-amount');
+    const amount = parseFloat(amtInput?.value || 0);
+    if (amount < 10) { showToast('Minimum top-up is R10.', true); return; }
+    const res = await api('wallet/add-money', 'POST', { amount, method: 'eft' });
+    closeModal('addMoneyModal'); closeModal('addModal');
+    if (res.success) {
+      showToast('R' + amount.toFixed(2) + ' added to wallet! 💰');
+      document.querySelectorAll('.st-val')[0].textContent = formatRand(res.wallet_balance);
+    } else showToast(res.message || 'Top-up failed.', true);
+  });
+
+  // Withdraw modal confirm
+  document.querySelector('#withdrawModal .btn-primary, #withdrawModal .btn-primary')?.addEventListener('click', async () => {
+    const amtInput = document.querySelector('#withdraw-amount, #withdrawModal input[type=number]');
+    const amount = parseFloat(amtInput?.value || 0);
+    if (amount < 50) { showToast('Minimum withdrawal is R50.', true); return; }
+    const res = await api('wallet/withdraw', 'POST', { amount });
+    closeModal('withdrawModal');
+    if (res.success) {
+      showToast('Withdrawal of ' + formatRand(amount) + ' is being processed! 🏦');
+      document.querySelectorAll('.st-val')[0].textContent = formatRand(res.wallet_balance);
+    } else showToast(res.message || 'Withdrawal failed.', true);
+  });
+})();
+</script>
+</body>
+</html>

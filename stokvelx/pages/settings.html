@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Settings – StokvelX</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="app-wrap">
+  <div id="sidebar-mount"></div>
+  <div class="main">
+    <div class="topbar"><div class="tb-title">Settings</div></div>
+    <div class="pg">
+      <div style="max-width:680px">
+        <div class="wcard" style="margin-bottom:20px">
+          <div class="wcard-hd"><h3>App Preferences</h3></div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:#f8fafb;border-radius:10px">
+              <div><div style="font-weight:600;font-size:14px">Push Notifications</div><div style="font-size:12px;color:var(--muted)">Get alerts for payments & payouts</div></div>
+              <input type="checkbox" checked style="width:18px;height:18px;accent-color:var(--green)">
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:#f8fafb;border-radius:10px">
+              <div><div style="font-weight:600;font-size:14px">SMS Reminders</div><div style="font-size:12px;color:var(--muted)">Contribution due reminders via SMS</div></div>
+              <input type="checkbox" checked style="width:18px;height:18px;accent-color:var(--green)">
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:#f8fafb;border-radius:10px">
+              <div><div style="font-weight:600;font-size:14px">Email Notifications</div><div style="font-size:12px;color:var(--muted)">Weekly summaries and receipts</div></div>
+              <input type="checkbox" checked style="width:18px;height:18px;accent-color:var(--green)">
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:#f8fafb;border-radius:10px">
+              <div><div style="font-weight:600;font-size:14px">Auto-Pay</div><div style="font-size:12px;color:var(--muted)">Automatically pay from wallet on due date</div></div>
+              <input type="checkbox" style="width:18px;height:18px;accent-color:var(--green)">
+            </div>
+          </div>
+        </div>
+
+        <div class="wcard" style="margin-bottom:20px">
+          <div class="wcard-hd"><h3>Quick Links</h3></div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <a href="profile.html" style="display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--border);border-radius:10px;transition:all .2s" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='var(--border)'">
+              <span style="font-size:20px">👤</span><div><div style="font-weight:600;font-size:14px">Edit Profile</div><div style="font-size:12px;color:var(--muted)">Update personal info & bank details</div></div><span style="margin-left:auto;color:var(--muted)">›</span>
+            </a>
+            <a href="wallet.html" style="display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--border);border-radius:10px;transition:all .2s" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='var(--border)'">
+              <span style="font-size:20px">💰</span><div><div style="font-weight:600;font-size:14px">Wallet & Payments</div><div style="font-size:12px;color:var(--muted)">Manage payment methods</div></div><span style="margin-left:auto;color:var(--muted)">›</span>
+            </a>
+            <a href="#" style="display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--border);border-radius:10px" onclick="showToast('Help centre opening...')">
+              <span style="font-size:20px">❓</span><div><div style="font-weight:600;font-size:14px">Help & Support</div><div style="font-size:12px;color:var(--muted)">FAQs, contact support</div></div><span style="margin-left:auto;color:var(--muted)">›</span>
+            </a>
+            <a href="#" style="display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--border);border-radius:10px" onclick="showToast('Privacy policy opened')">
+              <span style="font-size:20px">🔒</span><div><div style="font-weight:600;font-size:14px">Privacy Policy</div><div style="font-size:12px;color:var(--muted)">How we handle your data</div></div><span style="margin-left:auto;color:var(--muted)">›</span>
+            </a>
+          </div>
+        </div>
+
+        <button class="btn btn-sm" style="background:#fef2f2;color:var(--red);border:1px solid #fecaca;width:100%;justify-content:center" onclick="if(confirm('Logout?'))location.href='login.html'">🚪 Logout</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="mobnav-mount"></div>
+<div id="toast" class="toast"></div>
+<script src="../js/api.js"></script>
+<script src="../js/nav.js"></script>
+<script src="../js/main.js"></script>
+<script>
+(async () => {
+  const user = await requireAuth();
+  if (!user) return;
+  document.querySelectorAll('.nm').forEach(el => el.textContent = user.first_name + ' ' + user.last_name);
+  document.querySelectorAll('.u-av').forEach(el => el.textContent = user.first_name[0] + user.last_name[0]);
+})();
+</script>
+</body>
+</html>
