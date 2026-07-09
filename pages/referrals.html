@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Referrals – StokvelX</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="app-wrap">
+  <div id="sidebar-mount"></div>
+  <div class="main">
+    <div class="topbar"><div class="tb-title">Referrals</div></div>
+    <div class="pg">
+      <!-- Code Display -->
+      <div class="rc-display" data-code="SIPHO10">
+        <div style="font-size:14px;opacity:.8;margin-bottom:6px">Your Referral Code</div>
+        <div class="rcd-code">SIPHO10</div>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          <button class="copy-btn">📋 Copy Code</button>
+          <button class="copy-btn" onclick="showToast('Share link copied! 🔗')">🔗 Share Link</button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="rsg">
+        <div class="rs-card"><div class="v">12</div><div class="l">Total Referrals</div></div>
+        <div class="rs-card"><div class="v" style="color:var(--orange)">R60.00</div><div class="l">Pending Rewards</div></div>
+        <div class="rs-card"><div class="v" style="color:var(--green)">R250.00</div><div class="l">Total Earned</div></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <!-- How it works -->
+        <div class="wcard">
+          <div class="wcard-hd"><h3>How it Works</h3></div>
+          <div class="hiw-steps">
+            <div class="hiw-step"><div class="hiw-n">1</div><div><div style="font-size:14px;font-weight:600">Share your code</div><div style="font-size:13px;color:var(--muted)">Send SIPHO10 to your friends</div></div></div>
+            <div class="hiw-step"><div class="hiw-n">2</div><div><div style="font-size:14px;font-weight:600">They join & pay</div><div style="font-size:13px;color:var(--muted)">Friend signs up and makes first payment</div></div></div>
+            <div class="hiw-step"><div class="hiw-n">3</div><div><div style="font-size:14px;font-weight:600">You earn R10</div><div style="font-size:13px;color:var(--muted)">Credited to your wallet instantly</div></div></div>
+          </div>
+          <div style="background:var(--green-light);border-radius:10px;padding:14px;margin-top:16px;font-size:13px;color:var(--green-dark)">
+            🏆 Milestone: Earn <strong>R50 bonus</strong> after 10 referrals. You're at 12 — bonus already claimed!
+          </div>
+        </div>
+
+        <!-- Recent Referrals -->
+        <div class="wcard">
+          <div class="wcard-hd"><h3>Recent Referrals</h3></div>
+          <ul class="tx-list">
+            <li class="tx-item"><div class="tx-ico si-g">👤</div><div style="flex:1"><div class="tx-nm">Lukhanyo G.</div><div class="tx-mt">Joined 15 May · First payment made</div></div><div class="tx-amt cr">+R10</div></li>
+            <li class="tx-item"><div class="tx-ico si-g">👤</div><div style="flex:1"><div class="tx-nm">Amahle N.</div><div class="tx-mt">Joined 12 May · First payment made</div></div><div class="tx-amt cr">+R10</div></li>
+            <li class="tx-item"><div class="tx-ico si-g">👤</div><div style="flex:1"><div class="tx-nm">Bongani T.</div><div class="tx-mt">Joined 08 May · First payment made</div></div><div class="tx-amt cr">+R10</div></li>
+            <li class="tx-item"><div class="tx-ico" style="background:#fff7ed">⏳</div><div style="flex:1"><div class="tx-nm">Zanele M.</div><div class="tx-mt">Joined 20 May · Awaiting payment</div></div><div style="font-size:12px;color:var(--orange);font-weight:600">Pending</div></li>
+            <li class="tx-item"><div class="tx-ico" style="background:#fff7ed">⏳</div><div style="flex:1"><div class="tx-nm">Mpho K.</div><div class="tx-mt">Joined 21 May · Awaiting payment</div></div><div style="font-size:12px;color:var(--orange);font-weight:600">Pending</div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="mobnav-mount"></div>
+<div id="toast" class="toast"></div>
+<script src="../js/api.js"></script>
+<script src="../js/nav.js"></script>
+<script src="../js/main.js"></script>
+<script>
+(async () => {
+  const user = await requireAuth();
+  if (!user) return;
+  document.querySelectorAll('.nm').forEach(el => el.textContent = user.first_name + ' ' + user.last_name);
+  document.querySelectorAll('.u-av').forEach(el => el.textContent = user.first_name[0] + user.last_name[0]);
+
+  const data = await api('referrals/stats');
+  if (!data.success) return;
+
+  // Update all stat values
+  const statVals = document.querySelectorAll('.st-val');
+  if (statVals[0]) statVals[0].textContent = formatRand(data.total_earned);
+  if (statVals[1]) statVals[1].textContent = data.total;
+  if (statVals[2]) statVals[2].textContent = data.paid;
+  if (statVals[3]) statVals[3].textContent = data.pending;
+
+  // Referral code display
+  document.querySelectorAll('.ref-code, [data-ref-code]').forEach(el => el.textContent = data.referral_code);
+
+  // Copy referral link
+  const copyBtn = document.querySelector('.copy-ref-btn, [data-copy-ref]');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', () => {
+      const link = window.location.origin + '/stokvelx/pages/signup.html?ref=' + data.referral_code;
+      navigator.clipboard.writeText(link).then(() => showToast('Referral link copied! 🎉'));
+    });
+  }
+
+  // Referral list table
+  const tbody = document.querySelector('.ref-table tbody, .referrals-list');
+  if (tbody) {
+    tbody.innerHTML = data.referrals.length === 0
+      ? '<tr><td colspan="5" style="text-align:center;padding:30px;color:var(--muted)">No referrals yet. Share your code to earn!</td></tr>'
+      : data.referrals.map(r => `
+        <tr>
+          <td>${r.name}</td>
+          <td>${r.university || '—'}</td>
+          <td>${formatDate(r.date)}</td>
+          <td>${r.status === 'paid' ? formatRand(r.bonus_amount) : '—'}</td>
+          <td><span style="background:${r.status==='paid'?'#dcfce7':'#fef9c3'};color:${r.status==='paid'?'#16a34a':'#b45309'};padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;text-transform:capitalize">${r.status}</span></td>
+        </tr>`).join('');
+  }
+})();
+</script>
+</body>
+</html>

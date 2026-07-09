@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Profile – StokvelX</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="app-wrap">
+  <div id="sidebar-mount"></div>
+  <div class="main">
+    <div class="topbar"><div class="tb-title">Profile & Settings</div>
+      <div class="tb-right"><button class="btn btn-primary btn-sm" onclick="showToast('Profile saved! ✅')">Save Changes</button></div>
+    </div>
+    <div class="pg">
+      <!-- Profile Header -->
+      <div class="prof-hd">
+        <div class="prof-av">SD</div>
+        <div>
+          <div class="prof-nm">Sipho Dlamini</div>
+          <div class="prof-em">sipho.dlamini@student.uct.ac.za</div>
+          <div class="prof-badges">
+            <span class="badge badge-green">✓ Verified Student</span>
+            <span class="badge badge-blue">🎓 UCT</span>
+            <span class="badge badge-purple">⭐ 12 Referrals</span>
+          </div>
+        </div>
+        <div style="margin-left:auto">
+          <button class="btn btn-outline btn-sm">📷 Change Photo</button>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <!-- Personal Info -->
+        <div class="wcard">
+          <div class="wcard-hd"><h3>Personal Information</h3></div>
+          <div class="fg2">
+            <div class="fg"><label class="fl">First Name</label><input class="fi" value="Sipho"></div>
+            <div class="fg"><label class="fl">Last Name</label><input class="fi" value="Dlamini"></div>
+          </div>
+          <div class="fg"><label class="fl">Email Address</label><input class="fi" value="sipho.dlamini@student.uct.ac.za"></div>
+          <div class="fg"><label class="fl">Phone Number</label><input class="fi" value="+27 81 234 5678"></div>
+          <div class="fg"><label class="fl">University</label>
+            <select class="fi"><option selected>University of Cape Town (UCT)</option><option>Wits</option><option>UP</option></select>
+          </div>
+          <div class="fg"><label class="fl">Student Number</label><input class="fi" value="STUD2024001"></div>
+        </div>
+
+        <!-- Bank & Security -->
+        <div>
+          <div class="wcard" style="margin-bottom:20px">
+            <div class="wcard-hd"><h3>Bank Details</h3></div>
+            <div class="fg"><label class="fl">Bank Name</label>
+              <select class="fi"><option selected>FNB</option><option>Standard Bank</option><option>Capitec</option><option>Nedbank</option><option>Absa</option></select>
+            </div>
+            <div class="fg"><label class="fl">Account Number</label><input class="fi" value="••••••4521" type="password"></div>
+            <div class="fg"><label class="fl">Account Type</label>
+              <select class="fi"><option>Cheque / Current</option><option>Savings</option></select>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="showToast('Bank details verified ✅')">Verify Bank Account</button>
+          </div>
+
+          <div class="wcard">
+            <div class="wcard-hd"><h3>Security</h3></div>
+            <div class="fg"><label class="fl">Current Password</label><input class="fi" type="password" placeholder="••••••••"></div>
+            <div class="fg"><label class="fl">New Password</label><input class="fi" type="password" placeholder="••••••••"></div>
+            <div class="fg"><label class="fl">Confirm New Password</label><input class="fi" type="password" placeholder="••••••••"></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;background:#f8fafb;border-radius:10px;padding:14px;margin-bottom:14px">
+              <div>
+                <div style="font-size:14px;font-weight:600">Biometric Login</div>
+                <div style="font-size:12px;color:var(--muted)">Fingerprint / Face ID</div>
+              </div>
+              <label style="display:flex;align-items:center;cursor:pointer">
+                <input type="checkbox" checked style="width:16px;height:16px;accent-color:var(--green)">
+                <span style="margin-left:8px;font-size:13px;font-weight:600;color:var(--green)">Enabled</span>
+              </label>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="showToast('Password updated ✅')">Update Password</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notifications Settings -->
+      <div class="wcard" style="margin-top:20px">
+        <div class="wcard-hd"><h3>Notification Preferences</h3></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+          <label style="display:flex;align-items:center;gap:10px;background:#f8fafb;border-radius:10px;padding:14px;cursor:pointer">
+            <input type="checkbox" checked style="accent-color:var(--green)">
+            <div><div style="font-size:13px;font-weight:600">Contribution Reminders</div><div style="font-size:11px;color:var(--muted)">SMS + Email</div></div>
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;background:#f8fafb;border-radius:10px;padding:14px;cursor:pointer">
+            <input type="checkbox" checked style="accent-color:var(--green)">
+            <div><div style="font-size:13px;font-weight:600">Payout Notifications</div><div style="font-size:11px;color:var(--muted)">Push + Email</div></div>
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;background:#f8fafb;border-radius:10px;padding:14px;cursor:pointer">
+            <input type="checkbox" checked style="accent-color:var(--green)">
+            <div><div style="font-size:13px;font-weight:600">Referral Bonuses</div><div style="font-size:11px;color:var(--muted)">Push + SMS</div></div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Danger Zone -->
+      <div class="wcard" style="margin-top:20px;border-color:#fef2f2">
+        <div class="wcard-hd"><h3 style="color:var(--red)">Danger Zone</h3></div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn btn-sm" style="background:#fef2f2;color:var(--red);border:1px solid #fecaca" onclick="showToast('Account deactivated (demo mode)', '⚠️')">Deactivate Account</button>
+          <button class="btn btn-sm" style="background:#fef2f2;color:var(--red);border:1px solid #fecaca" onclick="showToast('Support ticket opened', '📞')">Contact Support</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="mobnav-mount"></div>
+<div id="toast" class="toast"></div>
+<script src="../js/api.js"></script>
+<script src="../js/nav.js"></script>
+<script src="../js/main.js"></script>
+<script>
+(async () => {
+  const user = await requireAuth();
+  if (!user) return;
+  document.querySelectorAll('.nm').forEach(el => el.textContent = user.first_name + ' ' + user.last_name);
+  document.querySelectorAll('.u-av').forEach(el => el.textContent = user.first_name[0] + user.last_name[0]);
+
+  const data = await api('profile/update');
+  if (!data.success) return;
+  const u = data.user;
+
+  // Populate form fields by id
+  const fill = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+  fill('p-fname', u.first_name); fill('p-lname', u.last_name);
+  fill('p-email', u.email); fill('p-phone', u.phone);
+  fill('p-uni', u.university); fill('p-studno', u.student_number);
+
+  if (data.bank) {
+    fill('p-bank', data.bank.bank_name); fill('p-accno', data.bank.account_number);
+    fill('p-acctype', data.bank.account_type);
+  }
+
+  // Populate display labels
+  document.querySelectorAll('[data-profile-name]').forEach(el => el.textContent = u.first_name + ' ' + u.last_name);
+  document.querySelectorAll('[data-profile-uni]').forEach(el => el.textContent = u.university || '—');
+  document.querySelectorAll('[data-profile-email]').forEach(el => el.textContent = u.email);
+  document.querySelectorAll('[data-profile-code]').forEach(el => el.textContent = u.referral_code);
+
+  // Save profile button
+  document.querySelectorAll('.save-profile-btn, [data-save-profile]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      btn.disabled = true; btn.textContent = 'Saving…';
+      const payload = {};
+      ['p-fname','p-lname','p-phone','p-uni','p-studno'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.value.trim()) payload[id.replace('p-','')] = el.value.trim();
+      });
+      // Map short keys to real field names
+      const map = { fname: 'first_name', lname: 'last_name', phone: 'phone', uni: 'university', studno: 'student_number' };
+      const mapped = {};
+      Object.keys(payload).forEach(k => { mapped[map[k] || k] = payload[k]; });
+
+      // Bank fields
+      const bankName = document.getElementById('p-bank')?.value.trim();
+      const accNo = document.getElementById('p-accno')?.value.trim();
+      if (bankName) mapped.bank_name = bankName;
+      if (accNo) mapped.account_number = accNo;
+      mapped.account_type = document.getElementById('p-acctype')?.value.trim() || 'Cheque / Current';
+
+      // Password change
+      const curPass = document.getElementById('p-curpass')?.value;
+      const newPass = document.getElementById('p-newpass')?.value;
+      if (curPass && newPass) { mapped.current_password = curPass; mapped.new_password = newPass; }
+
+      const res = await api('profile/update', 'POST', mapped);
+      if (res.success) showToast('Profile updated successfully! ✓');
+      else showToast(res.message || 'Update failed.', true);
+      btn.disabled = false; btn.textContent = 'Save Changes';
+    });
+  });
+})();
+</script>
+</body>
+</html>

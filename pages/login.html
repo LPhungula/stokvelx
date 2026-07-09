@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Login – StokvelX</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="auth-pg">
+  <div class="auth-left">
+    <div class="auth-brand"><div class="logo-icon" style="width:34px;height:34px;background:var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:16px;">X</div>StokvelX</div>
+    <h2>Welcome<br>back to your<br><span>circle 🔵</span></h2>
+    <p>Your savings community is waiting. Log in to check your balance, next payout and circle activity.</p>
+  </div>
+  <div class="auth-right">
+    <div class="auth-box">
+      <h2>Welcome back 👋</h2>
+      <p class="auth-sub">Login to your StokvelX account</p>
+      <div id="login-error" style="display:none;background:#fee2e2;color:#dc2626;padding:10px 14px;border-radius:8px;font-size:14px;margin-bottom:14px;"></div>
+      <div class="fg">
+        <label class="fl">Email</label>
+        <input id="login-email" class="fi" type="email" placeholder="sipho@student.ac.za">
+      </div>
+      <div class="fg">
+        <label class="fl">Password</label>
+        <input id="login-password" class="fi" type="password" placeholder="••••••••">
+        <div style="text-align:right;margin-top:6px"><a href="#" style="font-size:13px;color:var(--green)">Forgot password?</a></div>
+      </div>
+      <button id="login-btn" class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:16px">Login</button>
+      <div class="divider">or continue with demo</div>
+      <div style="display:flex;gap:10px;margin:14px 0 20px;flex-wrap:wrap;">
+        <button class="btn btn-outline demo-btn" data-email="sipho@student.uct.ac.za" data-pass="password123" style="flex:1;justify-content:center;font-size:13px;">👤 Demo Student</button>
+        <button class="btn btn-outline demo-btn" data-email="admin@stokvelx.com" data-pass="admin123" style="flex:1;justify-content:center;font-size:13px;">🛡️ Demo Admin</button>
+      </div>
+      <p style="text-align:center;font-size:14px;color:var(--muted)">Don't have an account? <a href="signup.html" style="color:var(--green);font-weight:600">Sign Up</a></p>
+    </div>
+  </div>
+</div>
+<script src="../js/api.js"></script>
+<script src="../js/main.js"></script>
+<script>
+(async () => {
+  // Already logged in? Go straight to dashboard
+  const check = await api('auth/me');
+  if (check.success) {
+    window.location.href = check.user.role === 'admin' ? 'admin.html' : 'dashboard.html';
+    return;
+  }
+
+  // Demo fill buttons
+  document.querySelectorAll('.demo-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.getElementById('login-email').value = btn.dataset.email;
+      document.getElementById('login-password').value = btn.dataset.pass;
+    });
+  });
+
+  document.getElementById('login-btn').addEventListener('click', async () => {
+    const btn   = document.getElementById('login-btn');
+    const email = document.getElementById('login-email').value.trim();
+    const pass  = document.getElementById('login-password').value;
+    const errEl = document.getElementById('login-error');
+    errEl.style.display = 'none';
+
+    if (!email || !pass) {
+      errEl.textContent = 'Please enter your email and password.';
+      errEl.style.display = 'block';
+      return;
+    }
+
+    btn.textContent = 'Logging in…';
+    btn.disabled = true;
+
+    const data = await api('auth/login', 'POST', { email, password: pass });
+    if (data.success) {
+      window.location.href = data.user.role === 'admin' ? 'admin.html' : 'dashboard.html';
+    } else {
+      errEl.textContent = data.message || 'Login failed. Please check your details.';
+      errEl.style.display = 'block';
+      btn.textContent = 'Login';
+      btn.disabled = false;
+    }
+  });
+
+  // Allow Enter key to submit
+  document.getElementById('login-password').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('login-btn').click();
+  });
+})();
+</script>
+</body>
+</html>
