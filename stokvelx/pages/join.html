@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Join a Circle – StokvelX</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="app-wrap">
+  <div id="sidebar-mount"></div>
+  <div class="main">
+    <div class="topbar"><div class="tb-title">Join a Circle</div></div>
+    <div class="pg">
+      <div class="ctabs">
+        <button class="ctab active">All Circles</button>
+        <button class="ctab">Standard</button>
+        <button class="ctab">Premium</button>
+        <button class="ctab">Investment</button>
+      </div>
+
+      <div class="jc-list">
+        <div class="jc-item">
+          <div class="jc-av">🟢</div>
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+              <span class="jc-nm">Campus Builders Stokvel</span>
+              <span class="badge badge-green">Standard</span>
+            </div>
+            <div class="jc-mt">R250 / week · 10 Members · 3 spots left</div>
+          </div>
+          <div style="text-align:right">
+            <div class="jc-pr">R250<span class="jc-per">/week</span></div>
+            <button class="btn btn-primary btn-sm join-now-btn" style="margin-top:6px">Join Now</button>
+          </div>
+        </div>
+
+        <div class="jc-item">
+          <div class="jc-av" style="background:#fff7ed">🟡</div>
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+              <span class="jc-nm">Future Leaders Stokvel</span>
+              <span class="badge badge-green">Standard</span>
+            </div>
+            <div class="jc-mt">R300 / week · 8 Members · 2 spots left</div>
+          </div>
+          <div style="text-align:right">
+            <div class="jc-pr">R300<span class="jc-per">/week</span></div>
+            <button class="btn btn-primary btn-sm join-now-btn" style="margin-top:6px">Join Now</button>
+          </div>
+        </div>
+
+        <div class="jc-item">
+          <div class="jc-av" style="background:#fff7ed">⭐</div>
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+              <span class="jc-nm">Vision 2025 Stokvel</span>
+              <span class="badge badge-orange">Premium</span>
+            </div>
+            <div class="jc-mt">R400 / week · 10 Members · Early payout slots available</div>
+          </div>
+          <div style="text-align:right">
+            <div class="jc-pr" style="color:var(--orange)">R400<span class="jc-per">/week</span></div>
+            <button class="btn btn-sm join-now-btn" style="margin-top:6px;background:var(--orange);color:#fff">Join Now</button>
+          </div>
+        </div>
+
+        <div class="jc-item">
+          <div class="jc-av" style="background:var(--purple-light)">💜</div>
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+              <span class="jc-nm">Invest & Grow Stokvel</span>
+              <span class="badge badge-purple">Investment</span>
+            </div>
+            <div class="jc-mt">R500 / week · 15 Members · ~8% returns</div>
+          </div>
+          <div style="text-align:right">
+            <div class="jc-pr" style="color:var(--purple)">R500<span class="jc-per">/week</span></div>
+            <button class="btn btn-purple btn-sm join-now-btn" style="margin-top:6px">Join Now</button>
+          </div>
+        </div>
+
+        <div class="jc-item">
+          <div class="jc-av">🔵</div>
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+              <span class="jc-nm">Graduation Goals Circle</span>
+              <span class="badge badge-green">Standard</span>
+            </div>
+            <div class="jc-mt">R200 / week · 12 Members · 5 spots left</div>
+          </div>
+          <div style="text-align:right">
+            <div class="jc-pr">R200<span class="jc-per">/week</span></div>
+            <button class="btn btn-primary btn-sm join-now-btn" style="margin-top:6px">Join Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="mobnav-mount"></div>
+
+<!-- Join Modal -->
+<div class="modal-ov" id="payModal">
+  <div class="modal">
+    <div class="modal-hd"><h3>Confirm & Pay First Contribution</h3><button class="modal-cls">✕</button></div>
+    <div style="background:var(--green-light);border-radius:12px;padding:16px;margin-bottom:20px;text-align:center">
+      <div style="font-size:13px;color:var(--muted)">First Contribution</div>
+      <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:var(--green)">R250.00</div>
+    </div>
+    <div class="fg"><label class="fl">Payment Method</label>
+      <select class="fi"><option>Wallet Balance</option><option>EFT</option><option>Card</option></select>
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="closeModal('payModal');showToast('Welcome to the circle! 🎉')">Confirm & Join</button>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="../js/api.js"></script>
+<script src="../js/nav.js"></script>
+<script src="../js/main.js"></script>
+<script>
+(async () => {
+  const user = await requireAuth();
+  if (!user) return;
+  document.querySelectorAll('.nm').forEach(el => el.textContent = user.first_name + ' ' + user.last_name);
+  document.querySelectorAll('.u-av').forEach(el => el.textContent = user.first_name[0] + user.last_name[0]);
+
+  let allCircles = [];
+
+  async function loadCircles(type) {
+    const url = type && type !== 'all' ? 'circles/list?type=' + type : 'circles/list';
+    const data = await api(url);
+    if (!data.success) return;
+    allCircles = data.circles;
+    renderCircles(data.circles);
+  }
+
+  function renderCircles(circles) {
+    const container = document.querySelector('.join-circles');
+    if (!container) return;
+    if (circles.length === 0) {
+      container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">No circles available in this category right now.</div>';
+      return;
+    }
+    container.innerHTML = circles.map(c => {
+      const typeColor = typeBadge(c.type);
+      const full = c.spots_left === 0;
+      const joined = c.already_joined;
+      const netPot = ((c.weekly_contribution - c.admin_fee) * c.max_members);
+      return `<div class="wcard" style="margin-bottom:16px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+          <div>
+            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;margin-bottom:4px">${c.name}</div>
+            <span style="background:${typeColor};color:#fff;border-radius:20px;padding:2px 8px;font-size:11px;font-weight:600;text-transform:capitalize">${c.type}</span>
+          </div>
+          <div style="text-align:right">
+            <div style="font-family:'Syne',sans-serif;font-weight:700;color:var(--green);font-size:18px">${formatRand(c.weekly_contribution)}<span style="font-size:12px;color:var(--muted)">/week</span></div>
+            <div style="font-size:12px;color:var(--muted)">${c.member_count}/${c.max_members} members</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:20px;margin-bottom:12px;flex-wrap:wrap">
+          <div style="font-size:13px"><span style="color:var(--muted)">Net Payout:</span> <strong style="color:var(--green)">${formatRand(netPot)}</strong></div>
+          <div style="font-size:13px"><span style="color:var(--muted)">Duration:</span> <strong>${c.cycle_weeks} weeks</strong></div>
+          <div style="font-size:13px"><span style="color:var(--muted)">Spots left:</span> <strong ${full ? 'style="color:#dc2626"' : ''}>${full ? 'FULL' : c.spots_left}</strong></div>
+        </div>
+        ${joined
+          ? '<div style="background:#dcfce7;color:#16a34a;border-radius:8px;padding:10px;text-align:center;font-size:14px;font-weight:600">✓ You\'re already a member</div>'
+          : full
+          ? '<button class="btn btn-outline" style="width:100%;justify-content:center;opacity:.5" disabled>Circle Full</button>'
+          : `<button class="btn btn-primary join-btn" data-id="${c.id}" data-name="${c.name}" style="width:100%;justify-content:center">Join Circle</button>`
+        }
+      </div>`;
+    }).join('');
+
+    document.querySelectorAll('.join-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        btn.disabled = true;
+        btn.textContent = 'Joining…';
+        const res = await api('circles/join', 'POST', { circle_id: parseInt(btn.dataset.id) });
+        if (res.success) {
+          showToast('Joined ' + btn.dataset.name + '! 🎉');
+          setTimeout(() => location.reload(), 1500);
+        } else {
+          showToast(res.message || 'Could not join circle.', true);
+          btn.disabled = false;
+          btn.textContent = 'Join Circle';
+        }
+      });
+    });
+  }
+
+  // Filter tabs
+  document.querySelectorAll('.filter-tab, [data-filter]').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.filter-tab, [data-filter]').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      loadCircles(tab.dataset.filter || tab.dataset.type || 'all');
+    });
+  });
+
+  await loadCircles('all');
+})();
+</script>
+</body>
+</html>
